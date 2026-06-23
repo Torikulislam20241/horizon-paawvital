@@ -1,0 +1,706 @@
+{% doc %}
+  @prompt
+    Create a custom Shopify theme section called "Advantages / Features Grid" with the following layout and behavior:
+    
+    **Desktop layout:**
+    - A heading at the top left (e.g. "Advantages of Wuff & Co")
+    - Below it, a 2-column grid of 4 feature cards
+    - Each card has: a small icon image (uploadable), a bold title, and a short paragraph description
+    - Clean white/off-white background, minimal styling, navy/dark text for titles
+    
+    **Mobile layout:**
+    - Stack all 4 cards vertically in a single column scroll format (no horizontal scroll)
+    - Cards should be full-width on mobile
+    
+    **Content (pre-fill as defaults, all editable in theme editor):**
+    1. Icon + Title: "Removes 99% of impurities" + Description: "The 5-layer carbon filter removes magnesium, calcium, hair, dirt, and other impurities from your dog's water."
+    2. Icon + Title: "30-day guarantee" + Description: "Whether in 30 minutes or after 30 days – if you are not satisfied as a customer, you will receive your money back, no questions asked."
+    3. Icon + Title: "Veterinarian tested & recommended" + Description: "Our products have been tested, approved, and recommended by veterinarians."
+    4. Icon + Title: "100% dog-safe materials" + Description: "All our products are food-safe and comply with FDA regulations."
+    
+    **Settings (editable in theme editor):**
+    - Section heading text
+    - Each card: icon image picker, title text, description text
+    - Option to add more cards (up to 6)
+    
+    Make the section fully responsive with clean CSS, no dependencies on external libraries.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-features-grid-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.section_padding_top }}px {{ block.settings.section_padding_horizontal }}px {{ block.settings.section_padding_bottom }}px;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-features-grid-container-{{ ai_gen_id }} {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .ai-features-grid-heading-{{ ai_gen_id }} {
+    margin: 0 0 {{ block.settings.heading_margin_bottom }}px 0;
+    padding-left: {{ block.settings.card_padding }}px;
+    color: {{ block.settings.heading_color }};
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .ai-features-grid-cards-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: {{ block.settings.card_gap }}px;
+  }
+
+  .ai-features-grid-card-{{ ai_gen_id }} {
+    background-color: {{ block.settings.card_background_color }};
+    padding: {{ block.settings.card_padding }}px;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    border: {{ block.settings.card_border_width }}px solid {{ block.settings.card_border_color }};
+  }
+
+  .ai-features-grid-icon-wrapper-{{ ai_gen_id }} {
+    margin-bottom: {{ block.settings.icon_margin_bottom }}px;
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+  }
+
+  .ai-features-grid-icon-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-features-grid-icon-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    background-color: #f4f4f4;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-features-grid-icon-placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-features-grid-card-title-{{ ai_gen_id }} {
+    margin: 0 0 {{ block.settings.title_margin_bottom }}px 0;
+    color: {{ block.settings.title_color }};
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .ai-features-grid-card-description-{{ ai_gen_id }} {
+    margin: 0;
+    color: {{ block.settings.description_color }};
+    font-size: {{ block.settings.description_size }}px;
+    line-height: 1.5;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-features-grid-{{ ai_gen_id }} {
+      padding: {{ block.settings.section_padding_top_mobile }}px {{ block.settings.section_padding_horizontal_mobile }}px {{ block.settings.section_padding_bottom_mobile }}px;
+    }
+
+    .ai-features-grid-heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size_mobile }}px;
+      margin: 0 0 {{ block.settings.heading_margin_bottom }}px {{ block.settings.card_padding }}px;
+      padding-left: 0;
+
+    }
+
+    .ai-features-grid-cards-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: {{ block.settings.card_gap_mobile }}px;
+    }
+
+    .ai-features-grid-card-{{ ai_gen_id }} {
+      padding: {{ block.settings.card_padding_mobile }}px;
+    }
+
+    .ai-features-grid-icon-wrapper-{{ ai_gen_id }} {
+      width: {{ block.settings.icon_size_mobile }}px;
+      height: {{ block.settings.icon_size_mobile }}px;
+      margin-bottom: {{ block.settings.icon_margin_bottom_mobile }}px;
+    }
+
+    .ai-features-grid-card-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size_mobile }}px;
+      margin-bottom: {{ block.settings.title_margin_bottom_mobile }}px;
+    }
+
+    .ai-features-grid-card-description-{{ ai_gen_id }} {
+      font-size: {{ block.settings.description_size_mobile }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-features-grid-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-features-grid-container-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank %}
+      <h2 class="ai-features-grid-heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="ai-features-grid-cards-{{ ai_gen_id }}">
+      {% for i in (1..6) %}
+        {% liquid
+          assign card_enabled_key = 'card_' | append: i | append: '_enabled'
+          assign card_icon_key = 'card_' | append: i | append: '_icon'
+          assign card_title_key = 'card_' | append: i | append: '_title'
+          assign card_description_key = 'card_' | append: i | append: '_description'
+
+          assign card_enabled = block.settings[card_enabled_key]
+          assign card_icon = block.settings[card_icon_key]
+          assign card_title = block.settings[card_title_key]
+          assign card_description = block.settings[card_description_key]
+        %}
+
+        {% if card_enabled %}
+          <div class="ai-features-grid-card-{{ ai_gen_id }}">
+            <div class="ai-features-grid-icon-wrapper-{{ ai_gen_id }}">
+              {% if card_icon %}
+                <img
+                  src="{{ card_icon | image_url: width: 200 }}"
+                  alt="{{ card_title | escape }}"
+                  class="ai-features-grid-icon-{{ ai_gen_id }}"
+                  loading="lazy"
+                  width="200"
+                  height="200"
+                >
+              {% else %}
+                <div class="ai-features-grid-icon-placeholder-{{ ai_gen_id }}">
+                  {{ 'image' | placeholder_svg_tag }}
+                </div>
+              {% endif %}
+            </div>
+
+            {% if card_title != blank %}
+              <h3 class="ai-features-grid-card-title-{{ ai_gen_id }}">{{ card_title }}</h3>
+            {% endif %}
+
+            {% if card_description != blank %}
+              <p class="ai-features-grid-card-description-{{ ai_gen_id }}">{{ card_description }}</p>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Features grid",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Advantages of Wuff & Co"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Desktop heading size",
+      "min": 16,
+      "max": 72,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Mobile heading size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "label": "Desktop heading spacing",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom_mobile",
+      "label": "Mobile heading spacing",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Desktop card gap",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "card_gap_mobile",
+      "label": "Mobile card gap",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Desktop top padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Desktop bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "section_padding_horizontal",
+      "label": "Desktop horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top_mobile",
+      "label": "Mobile top padding",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom_mobile",
+      "label": "Mobile bottom padding",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "section_padding_horizontal_mobile",
+      "label": "Mobile horizontal padding",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Desktop card padding",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 25
+    },
+    {
+      "type": "range",
+      "id": "card_padding_mobile",
+      "label": "Mobile card padding",
+      "min": 10,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "card_border_width",
+      "label": "Card border width",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border color",
+      "default": "#e6e6e6"
+    },
+    {
+      "type": "header",
+      "content": "Icon style"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Desktop icon size",
+      "min": 30,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "icon_size_mobile",
+      "label": "Mobile icon size",
+      "min": 30,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "icon_margin_bottom",
+      "label": "Desktop icon spacing",
+      "min": 5,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "icon_margin_bottom_mobile",
+      "label": "Mobile icon spacing",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Card text style"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Desktop title size",
+      "min": 14,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "label": "Mobile title size",
+      "min": 14,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom",
+      "label": "Desktop title spacing",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom_mobile",
+      "label": "Mobile title spacing",
+      "min": 5,
+      "max": 20,
+      "step": 5,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Desktop description size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "description_size_mobile",
+      "label": "Mobile description size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Card 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_1_enabled",
+      "label": "Enable card 1",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_1_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "card_1_title",
+      "label": "Title",
+      "default": "Removes 99% of impurities"
+    },
+    {
+      "type": "textarea",
+      "id": "card_1_description",
+      "label": "Description",
+      "default": "The 5-layer carbon filter removes magnesium, calcium, hair, dirt, and other impurities from your dog's water."
+    },
+    {
+      "type": "header",
+      "content": "Card 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_2_enabled",
+      "label": "Enable card 2",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_2_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "card_2_title",
+      "label": "Title",
+      "default": "30-day guarantee"
+    },
+    {
+      "type": "textarea",
+      "id": "card_2_description",
+      "label": "Description",
+      "default": "Whether in 30 minutes or after 30 days – if you are not satisfied as a customer, you will receive your money back, no questions asked."
+    },
+    {
+      "type": "header",
+      "content": "Card 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_3_enabled",
+      "label": "Enable card 3",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_3_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "card_3_title",
+      "label": "Title",
+      "default": "Veterinarian tested & recommended"
+    },
+    {
+      "type": "textarea",
+      "id": "card_3_description",
+      "label": "Description",
+      "default": "Our products have been tested, approved, and recommended by veterinarians."
+    },
+    {
+      "type": "header",
+      "content": "Card 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_4_enabled",
+      "label": "Enable card 4",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_4_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "card_4_title",
+      "label": "Title",
+      "default": "100% dog-safe materials"
+    },
+    {
+      "type": "textarea",
+      "id": "card_4_description",
+      "label": "Description",
+      "default": "All our products are food-safe and comply with FDA regulations."
+    },
+    {
+      "type": "header",
+      "content": "Card 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_5_enabled",
+      "label": "Enable card 5",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "card_5_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "card_5_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "card_5_description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Card 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_6_enabled",
+      "label": "Enable card 6",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "card_6_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "card_6_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "card_6_description",
+      "label": "Description"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Features grid"
+    }
+  ],
+  "tag": null
+}
+{% endschema %}

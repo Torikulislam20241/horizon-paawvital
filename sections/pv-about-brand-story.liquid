@@ -1,0 +1,420 @@
+{%- liquid
+  assign eyebrow   = section.settings.eyebrow
+  assign heading   = section.settings.heading
+  assign body_text = section.settings.body_text
+  assign img       = section.settings.image
+  assign img_alt   = section.settings.image_alt
+  assign layout    = section.settings.layout
+-%}
+
+<section
+  class="pv-section pv-story"
+  aria-labelledby="pv-story-heading-{{ section.id }}"
+  itemscope
+  itemtype="https://schema.org/Organization"
+>
+  <div class="pv-story__inner {% if layout == 'image_right' %}pv-story__inner--reverse{% endif %}">
+
+    <!-- Image Column -->
+    <div class="pv-story__image-col">
+      {%- if img != blank -%}
+        <img
+          src="{{ img | image_url: width: 900 }}"
+          srcset="
+            {{ img | image_url: width: 460 }} 460w,
+            {{ img | image_url: width: 720 }} 720w,
+            {{ img | image_url: width: 900 }} 900w
+          "
+          sizes="(max-width: 749px) 100vw, (max-width: 989px) 50vw, 600px"
+          alt="{{ img_alt | escape | default: img.alt | escape }}"
+          width="900"
+          height="675"
+          loading="lazy"
+          class="pv-story__img"
+          itemprop="image"
+        >
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'pv-story__placeholder' }}
+      {%- endif -%}
+    </div>
+
+    <!-- Text Column -->
+    <div class="pv-story__text-col">
+      {%- if eyebrow != blank -%}
+        <p class="pv-story__eyebrow">{{ eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if heading != blank -%}
+        <h2
+          class="pv-story__heading"
+          id="pv-story-heading-{{ section.id }}"
+          itemprop="name"
+        >{{ heading }}</h2>
+      {%- endif -%}
+
+      {%- if body_text != blank -%}
+        <p class="pv-story__body" itemprop="description">{{ body_text }}</p>
+      {%- endif -%}
+
+      {%- liquid
+        assign has_pillars = false
+        for i in (1..3)
+          assign t_key = 'pillar_' | append: i | append: '_title'
+          if section.settings[t_key] != blank
+            assign has_pillars = true
+          endif
+        endfor
+      -%}
+
+      {%- if has_pillars -%}
+        <ul class="pv-story__pillars" aria-label="Our core values">
+          {%- for i in (1..3) -%}
+            {%- liquid
+              assign icon_key  = 'pillar_' | append: i | append: '_icon'
+              assign title_key = 'pillar_' | append: i | append: '_title'
+              assign p_icon    = section.settings[icon_key]
+              assign p_title   = section.settings[title_key]
+            -%}
+            {%- if p_title != blank -%}
+              <li class="pv-story__pillar">
+                <span class="pv-story__pillar-icon" aria-hidden="true">
+                  {%- case p_icon -%}
+                    {%- when 'heart' -%}
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    {%- when 'shield' -%}
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    {%- when 'zap' -%}
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    {%- when 'star' -%}
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    {%- when 'leaf' -%}
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 19.5c1.15-.15 2.23-.4 3.18-.7 2-.6 3.5-2 4.5-4 .6-1.2 1.1-2.5 1.5-4 .25-1 .5-2 .5-3.8z"/><path d="M6 19.5C4.67 14.11 5.6 9.6 8 6.5"/></svg>
+                    {%- else -%}
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  {%- endcase -%}
+                </span>
+                <span class="pv-story__pillar-text">{{ p_title }}</span>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+<style>
+/* ────────────────────────────────────────────
+   PV BRAND STORY — About Us Section 1
+   Matches PaawVital Horizon theme design system
+──────────────────────────────────────────── */
+
+.pv-section.pv-story {
+  background: #ffffff;
+  padding: 80px 40px;
+  font-family: Inter, sans-serif;
+}
+
+/* Two-column grid */
+.pv-story__inner {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 72px;
+  align-items: center;
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+/* Reverse: text left, image right */
+.pv-story__inner--reverse {
+  grid-template-columns: 1fr 1.05fr;
+}
+.pv-story__inner--reverse .pv-story__image-col { order: 2; }
+.pv-story__inner--reverse .pv-story__text-col  { order: 1; }
+
+/* Image */
+.pv-story__image-col {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.pv-story__img,
+.pv-story__placeholder {
+  width: 100%;
+  height: auto;
+  max-height: 580px;
+  object-fit: cover;
+  border-radius: 20px;
+  display: block;
+}
+
+/* Text column */
+.pv-story__text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  justify-content: center;
+}
+
+/* Eyebrow */
+.pv-story__eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #00cea7;
+  margin: 0;
+}
+
+/* H2 heading */
+.pv-story__heading {
+  font-family: Inter, sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  color: #000000;
+  margin: 0;
+  line-height: 1.25;
+}
+
+/* Body */
+.pv-story__body {
+  font-size: 18px;
+  font-weight: 400;
+  color: #000000cf;
+  margin: 0;
+  line-height: 1.75;
+}
+
+/* Brand pillars */
+.pv-story__pillars {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pv-story__pillar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pv-story__pillar-icon {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: rgba(0, 206, 167, 0.1);
+  color: #00cea7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pv-story__pillar-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+  line-height: 1.4;
+}
+
+/* ── Large desktop ≥1600px ── */
+@media (min-width: 1600px) {
+  .pv-section.pv-story {
+    padding: 96px 60px;
+  }
+  .pv-story__inner {
+    max-width: 1400px;
+    gap: 88px;
+  }
+  .pv-story__img,
+  .pv-story__placeholder {
+    max-height: 640px;
+  }
+  .pv-story__heading { font-size: 46px; }
+  .pv-story__body    { font-size: 19px; }
+  .pv-story__pillar-text { font-size: 17px; }
+}
+
+/* ── Small desktop / laptop 990–1279px ── */
+@media (min-width: 990px) and (max-width: 1279px) {
+  .pv-story__inner { gap: 48px; }
+  .pv-story__heading { font-size: 34px; }
+}
+
+/* ── Tablet ≤989px ── */
+@media (max-width: 989px) {
+  .pv-section.pv-story { padding: 56px 28px; }
+  .pv-story__inner {
+    gap: 36px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .pv-story__inner--reverse {
+    grid-template-columns: 1fr 1fr;
+  }
+  .pv-story__img,
+  .pv-story__placeholder { max-height: 440px; }
+  .pv-story__heading { font-size: 30px; }
+  .pv-story__body    { font-size: 17px; }
+  .pv-story__pillar-text { font-size: 15px; }
+}
+
+/* ── Mobile ≤749px ── */
+@media (max-width: 749px) {
+  .pv-section.pv-story { padding: 48px 16px; }
+  .pv-story__inner,
+  .pv-story__inner--reverse {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .pv-story__image-col       { order: 1 !important; }
+  .pv-story__text-col        { order: 2 !important; }
+  .pv-story__img,
+  .pv-story__placeholder     { max-height: 320px; }
+  .pv-story__heading         { font-size: 26px; }
+  .pv-story__body            { font-size: 16px; }
+  .pv-story__pillar-icon     { width: 36px; height: 36px; }
+  .pv-story__pillar-text     { font-size: 15px; }
+}
+
+/* ── Small phones ≤380px ── */
+@media (max-width: 380px) {
+  .pv-section.pv-story { padding: 40px 12px; }
+  .pv-story__heading   { font-size: 22px; }
+  .pv-story__body      { font-size: 15px; }
+}
+</style>
+
+{% schema %}
+{
+  "name": "PV Brand Story",
+  "tag": "section",
+  "class": "pv-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Image position",
+      "default": "image_left",
+      "options": [
+        { "value": "image_left",  "label": "Image left"  },
+        { "value": "image_right", "label": "Image right" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Section image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "info": "Describe the image for accessibility and SEO.",
+      "default": "Paawvital smart pet grooming and care products"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Our Mission"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading (H2)",
+      "default": "Making Pet Care Smarter, Safer & Simpler"
+    },
+    {
+      "type": "textarea",
+      "id": "body_text",
+      "label": "Body text",
+      "default": "At Paawvital, we believe every pet deserves the best care — and every pet owner deserves tools that make that care effortless. We design smart, thoughtfully engineered products that support your dog's health, comfort, and well-being every single day."
+    },
+    {
+      "type": "header",
+      "content": "Brand Values (Pillars)"
+    },
+    {
+      "type": "select",
+      "id": "pillar_1_icon",
+      "label": "Pillar 1 icon",
+      "default": "heart",
+      "options": [
+        { "value": "heart",  "label": "Heart"      },
+        { "value": "shield", "label": "Shield"     },
+        { "value": "zap",    "label": "Lightning"  },
+        { "value": "star",   "label": "Star"       },
+        { "value": "leaf",   "label": "Leaf"       },
+        { "value": "check",  "label": "Checkmark"  }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "pillar_1_title",
+      "label": "Pillar 1 text",
+      "default": "Pet health & well-being always comes first"
+    },
+    {
+      "type": "select",
+      "id": "pillar_2_icon",
+      "label": "Pillar 2 icon",
+      "default": "shield",
+      "options": [
+        { "value": "heart",  "label": "Heart"      },
+        { "value": "shield", "label": "Shield"     },
+        { "value": "zap",    "label": "Lightning"  },
+        { "value": "star",   "label": "Star"       },
+        { "value": "leaf",   "label": "Leaf"       },
+        { "value": "check",  "label": "Checkmark"  }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "pillar_2_title",
+      "label": "Pillar 2 text",
+      "default": "Safe, BPA-free materials tested for all breeds"
+    },
+    {
+      "type": "select",
+      "id": "pillar_3_icon",
+      "label": "Pillar 3 icon",
+      "default": "zap",
+      "options": [
+        { "value": "heart",  "label": "Heart"      },
+        { "value": "shield", "label": "Shield"     },
+        { "value": "zap",    "label": "Lightning"  },
+        { "value": "star",   "label": "Star"       },
+        { "value": "leaf",   "label": "Leaf"       },
+        { "value": "check",  "label": "Checkmark"  }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "pillar_3_title",
+      "label": "Pillar 3 text",
+      "default": "Smart innovation that simplifies daily pet care"
+    }
+  ],
+  "presets": [
+    {
+      "name": "PV Brand Story"
+    }
+  ]
+}
+{% endschema %}

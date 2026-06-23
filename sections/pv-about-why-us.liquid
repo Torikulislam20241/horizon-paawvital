@@ -1,0 +1,383 @@
+{%- liquid
+  assign eyebrow  = section.settings.eyebrow
+  assign heading  = section.settings.heading
+  assign subtext  = section.settings.subtext
+  assign cols     = section.settings.columns
+-%}
+
+<section
+  class="pv-section pv-why"
+  aria-labelledby="pv-why-heading-{{ section.id }}"
+>
+  <div class="pv-why__inner">
+
+    <!-- Section header -->
+    <header class="pv-why__header">
+      {%- if eyebrow != blank -%}
+        <p class="pv-why__eyebrow">{{ eyebrow }}</p>
+      {%- endif -%}
+      {%- if heading != blank -%}
+        <h2 class="pv-why__heading" id="pv-why-heading-{{ section.id }}">{{ heading }}</h2>
+      {%- endif -%}
+      {%- if subtext != blank -%}
+        <p class="pv-why__subtext">{{ subtext }}</p>
+      {%- endif -%}
+    </header>
+
+    <!-- Cards grid -->
+    {%- assign card_count = section.blocks.size -%}
+    {%- if card_count > 0 -%}
+      <ul
+        class="pv-why__grid pv-why__grid--{{ cols }}"
+        aria-label="Why choose Paawvital"
+        role="list"
+      >
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign icon       = block.settings.icon
+            assign card_title = block.settings.card_title
+            assign card_body  = block.settings.card_body
+            assign accent     = block.settings.accent_color
+          -%}
+          <li class="pv-why__card" {{ block.shopify_attributes }}>
+            <div
+              class="pv-why__icon-wrap"
+              style="--pv-card-accent: {{ accent }};"
+              aria-hidden="true"
+            >
+              {%- case icon -%}
+                {%- when 'shield' -%}
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                {%- when 'truck' -%}
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                {%- when 'refresh' -%}
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                {%- when 'heart' -%}
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                {%- when 'star' -%}
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                {%- when 'zap' -%}
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                {%- when 'globe' -%}
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                {%- when 'award' -%}
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="6"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                {%- else -%}
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              {%- endcase -%}
+            </div>
+            {%- if card_title != blank -%}
+              <h3 class="pv-why__card-title">{{ card_title }}</h3>
+            {%- endif -%}
+            {%- if card_body != blank -%}
+              <p class="pv-why__card-body">{{ card_body }}</p>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+/* ────────────────────────────────────────────
+   PV WHY CHOOSE US — About Us Section 2
+   Matches PaawVital Horizon theme design system
+──────────────────────────────────────────── */
+
+.pv-section.pv-why {
+  background: #f5f5f5;
+  padding: 80px 40px;
+  font-family: Inter, sans-serif;
+}
+
+.pv-why__inner {
+  max-width: 1250px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+/* ── Header ── */
+.pv-why__header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+.pv-why__eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #00cea7;
+  margin: 0;
+}
+
+.pv-why__heading {
+  font-family: Inter, sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  color: #000000;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.pv-why__subtext {
+  font-size: 18px;
+  color: #000000cf;
+  margin: 0;
+  line-height: 1.65;
+}
+
+/* ── Grid ── */
+.pv-why__grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 24px;
+}
+
+/* Column count variants */
+.pv-why__grid--2 { grid-template-columns: repeat(2, 1fr); }
+.pv-why__grid--3 { grid-template-columns: repeat(3, 1fr); }
+.pv-why__grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+/* ── Card ── */
+.pv-why__card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.pv-why__card:hover {
+  box-shadow: 0 8px 32px rgba(0,206,167,0.12);
+  transform: translateY(-3px);
+}
+
+/* ── Icon ── */
+.pv-why__icon-wrap {
+  --pv-card-accent: #00cea7;
+  width: 56px;
+  height: 56px;
+  border-radius: 15px;
+  background: rgba(0, 206, 167, 0.10);
+  background: color-mix(in srgb, var(--pv-card-accent) 12%, transparent);
+  color: var(--pv-card-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Card text ── */
+.pv-why__card-title {
+  font-family: Inter, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #000000;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.pv-why__card-body {
+  font-size: 15px;
+  color: #000000b3;
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* ── Large desktop ≥1440px ── */
+@media (min-width: 1440px) {
+  .pv-section.pv-why {
+    padding: 96px 60px;
+  }
+  .pv-why__inner {
+    max-width: 1400px;
+    gap: 64px;
+  }
+  .pv-why__heading { font-size: 46px; }
+  .pv-why__subtext  { font-size: 19px; }
+  .pv-why__card-title { font-size: 21px; }
+}
+
+/* ── Tablet 750–989px ── */
+@media (max-width: 989px) {
+  .pv-section.pv-why   { padding: 56px 28px; }
+  .pv-why__inner       { gap: 40px; }
+  .pv-why__heading     { font-size: 30px; }
+  .pv-why__subtext     { font-size: 17px; }
+
+  .pv-why__grid--3,
+  .pv-why__grid--4     { grid-template-columns: repeat(2, 1fr); }
+  .pv-why__grid--2     { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Mobile ≤749px ── */
+@media (max-width: 749px) {
+  .pv-section.pv-why   { padding: 48px 16px; }
+  .pv-why__inner       { gap: 32px; }
+  .pv-why__heading     { font-size: 26px; }
+  .pv-why__subtext     { font-size: 16px; }
+
+  .pv-why__grid--2,
+  .pv-why__grid--3,
+  .pv-why__grid--4     { grid-template-columns: 1fr; }
+
+  .pv-why__card        { padding: 28px 20px; }
+  .pv-why__card-title  { font-size: 18px; }
+  .pv-why__card-body   { font-size: 14px; }
+  .pv-why__icon-wrap   { width: 48px; height: 48px; }
+}
+
+/* ── Small phones ≤380px ── */
+@media (max-width: 380px) {
+  .pv-section.pv-why  { padding: 40px 12px; }
+  .pv-why__heading    { font-size: 22px; }
+}
+</style>
+
+{% schema %}
+{
+  "name": "PV Why Choose Us",
+  "tag": "section",
+  "class": "pv-section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Cards per row (desktop)",
+      "default": "4",
+      "options": [
+        { "value": "2", "label": "2 columns" },
+        { "value": "3", "label": "3 columns" },
+        { "value": "4", "label": "4 columns" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Why Paawvital"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading (H2)",
+      "default": "Everything Your Pet Needs. Nothing They Don't."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "We design with one goal — helping dogs and cats live happier, healthier lives through smarter products."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "value_card",
+      "name": "Value Card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "shield",
+          "options": [
+            { "value": "shield",  "label": "Shield (Safety)"         },
+            { "value": "truck",   "label": "Truck (Shipping)"        },
+            { "value": "refresh", "label": "Refresh (Returns)"       },
+            { "value": "heart",   "label": "Heart (Care)"            },
+            { "value": "star",    "label": "Star (Quality)"          },
+            { "value": "zap",     "label": "Lightning (Innovation)"  },
+            { "value": "globe",   "label": "Globe (Global)"          },
+            { "value": "award",   "label": "Award (Excellence)"      },
+            { "value": "check",   "label": "Checkmark (Done)"        }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Icon accent color",
+          "default": "#00cea7"
+        },
+        {
+          "type": "text",
+          "id": "card_title",
+          "label": "Card title (H3)",
+          "default": "Safe for All Breeds"
+        },
+        {
+          "type": "textarea",
+          "id": "card_body",
+          "label": "Card description",
+          "default": "Every product is tested to be safe for dogs and cats of all sizes and coat types."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PV Why Choose Us",
+      "blocks": [
+        {
+          "type": "value_card",
+          "settings": {
+            "icon": "shield",
+            "accent_color": "#00cea7",
+            "card_title": "Vet-Friendly Products",
+            "card_body": "Our grooming and feeding tools are designed with pet health in mind — safe materials, smooth edges, stress-free use."
+          }
+        },
+        {
+          "type": "value_card",
+          "settings": {
+            "icon": "truck",
+            "accent_color": "#1e5c3a",
+            "card_title": "Fast & Free Shipping",
+            "card_body": "Free shipping on orders over $30 to the US, Canada, and New Zealand. Quick dispatch, real tracking."
+          }
+        },
+        {
+          "type": "value_card",
+          "settings": {
+            "icon": "refresh",
+            "accent_color": "#00cea7",
+            "card_title": "30-Day Money-Back",
+            "card_body": "Not satisfied? Return within 30 days, no questions asked. We stand fully behind every product we sell."
+          }
+        },
+        {
+          "type": "value_card",
+          "settings": {
+            "icon": "heart",
+            "accent_color": "#1e5c3a",
+            "card_title": "Built for Everyday Life",
+            "card_body": "From feeding time to travel, our products fit seamlessly into your pet's daily routine — and yours."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

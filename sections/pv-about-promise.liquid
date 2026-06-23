@@ -1,0 +1,598 @@
+{%- liquid
+  assign eyebrow    = section.settings.eyebrow
+  assign heading    = section.settings.heading
+  assign subtext    = section.settings.subtext
+  assign show_stats = section.settings.show_stats
+  assign cta_label  = section.settings.cta_label
+  assign cta_url    = section.settings.cta_url
+  assign bg_color   = section.settings.bg_color
+-%}
+
+<section
+  class="pv-section pv-promise"
+  aria-labelledby="pv-promise-heading-{{ section.id }}"
+  style="--pv-promise-bg: {{ bg_color }};"
+>
+  <div class="pv-promise__inner">
+
+    <!-- ── Section Header ── -->
+    <header class="pv-promise__header">
+      {%- if eyebrow != blank -%}
+        <p class="pv-promise__eyebrow">{{ eyebrow }}</p>
+      {%- endif -%}
+      {%- if heading != blank -%}
+        <h2 class="pv-promise__heading" id="pv-promise-heading-{{ section.id }}">{{ heading }}</h2>
+      {%- endif -%}
+      {%- if subtext != blank -%}
+        <p class="pv-promise__subtext">{{ subtext }}</p>
+      {%- endif -%}
+    </header>
+
+    <!-- ── Stats Bar ── -->
+    {%- if show_stats -%}
+      {%- liquid
+        assign has_stats = false
+        for i in (1..4)
+          assign sv_key = 'stat_' | append: i | append: '_value'
+          if section.settings[sv_key] != blank
+            assign has_stats = true
+          endif
+        endfor
+      -%}
+      {%- if has_stats -%}
+        <div class="pv-promise__stats" aria-label="Paawvital at a glance" role="list">
+          {%- for i in (1..4) -%}
+            {%- liquid
+              assign sv_key    = 'stat_' | append: i | append: '_value'
+              assign sl_key    = 'stat_' | append: i | append: '_label'
+              assign stat_val  = section.settings[sv_key]
+              assign stat_lbl  = section.settings[sl_key]
+            -%}
+            {%- if stat_val != blank -%}
+              <div class="pv-promise__stat" role="listitem">
+                <p class="pv-promise__stat-value">{{ stat_val }}</p>
+                {%- if stat_lbl != blank -%}
+                  <p class="pv-promise__stat-label">{{ stat_lbl }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
+    <!-- ── Promise Cards ── -->
+    {%- if section.blocks.size > 0 -%}
+      <ul class="pv-promise__cards" aria-label="Our quality commitments" role="list">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign c_img   = block.settings.image
+            assign c_alt   = block.settings.image_alt
+            assign c_title = block.settings.card_title
+            assign c_body  = block.settings.card_body
+            assign c_badge = block.settings.badge
+          -%}
+          <li class="pv-promise__card" {{ block.shopify_attributes }}>
+            {%- if c_img != blank -%}
+              <div class="pv-promise__card-img-wrap">
+                <img
+                  src="{{ c_img | image_url: width: 640 }}"
+                  srcset="
+                    {{ c_img | image_url: width: 340 }} 340w,
+                    {{ c_img | image_url: width: 480 }} 480w,
+                    {{ c_img | image_url: width: 640 }} 640w
+                  "
+                  sizes="(max-width: 749px) 100vw, (max-width: 989px) 50vw, 33vw"
+                  alt="{{ c_alt | escape | default: c_img.alt | escape }}"
+                  width="640"
+                  height="420"
+                  loading="lazy"
+                  class="pv-promise__card-img"
+                >
+                {%- if c_badge != blank -%}
+                  <span class="pv-promise__badge">{{ c_badge }}</span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+            <div class="pv-promise__card-body">
+              {%- if c_title != blank -%}
+                <h3 class="pv-promise__card-title">{{ c_title }}</h3>
+              {%- endif -%}
+              {%- if c_body != blank -%}
+                <p class="pv-promise__card-text">{{ c_body }}</p>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    <!-- ── CTA ── -->
+    {%- if cta_label != blank and cta_url != blank -%}
+      <div class="pv-promise__cta-wrap">
+        <a
+          href="{{ cta_url }}"
+          class="pv-promise__cta"
+          aria-label="{{ cta_label }}"
+        >
+          {{ cta_label }}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<style>
+/* ────────────────────────────────────────────
+   PV QUALITY PROMISE — About Us Section 3
+   Matches PaawVital Horizon theme design system
+──────────────────────────────────────────── */
+
+.pv-section.pv-promise {
+  background: var(--pv-promise-bg, #ffffff);
+  padding: 80px 40px;
+  font-family: Inter, sans-serif;
+}
+
+.pv-promise__inner {
+  max-width: 1250px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  align-items: center;
+}
+
+/* ── Header ── */
+.pv-promise__header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  max-width: 700px;
+}
+
+.pv-promise__eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #00cea7;
+  margin: 0;
+}
+
+.pv-promise__heading {
+  font-family: Inter, sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  color: #000000;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.pv-promise__subtext {
+  font-size: 18px;
+  color: #000000cf;
+  margin: 0;
+  line-height: 1.65;
+}
+
+/* ── Stats Bar ── */
+.pv-promise__stats {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  background: #1e5c3a;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.pv-promise__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 36px 20px;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+}
+
+.pv-promise__stat:last-child {
+  border-right: none;
+}
+
+.pv-promise__stat-value {
+  font-size: 36px;
+  font-weight: 800;
+  color: #00cea7;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.pv-promise__stat-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.80);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ── Cards grid ── */
+.pv-promise__cards {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ── Card ── */
+.pv-promise__card {
+  background: #f5f5f5;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.pv-promise__card:hover {
+  box-shadow: 0 10px 36px rgba(0,0,0,0.09);
+  transform: translateY(-4px);
+}
+
+.pv-promise__card-img-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+}
+
+.pv-promise__card-img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.pv-promise__card:hover .pv-promise__card-img {
+  transform: scale(1.04);
+}
+
+/* Badge */
+.pv-promise__badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: #00cea7;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 14px;
+}
+
+.pv-promise__card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px 24px 28px;
+  flex: 1;
+}
+
+.pv-promise__card-title {
+  font-family: Inter, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #000000;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.pv-promise__card-text {
+  font-size: 15px;
+  color: #000000b3;
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* ── CTA ── */
+.pv-promise__cta-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.pv-promise__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #00cea7;
+  color: #ffffff;
+  font-family: Inter, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 16px 32px;
+  border-radius: 14px;
+  text-decoration: none;
+  transition: background 0.22s ease, transform 0.2s ease, box-shadow 0.22s ease;
+  letter-spacing: 0.01em;
+}
+
+.pv-promise__cta:hover {
+  background: #00b891;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,206,167,0.30);
+}
+
+.pv-promise__cta svg {
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.pv-promise__cta:hover svg {
+  transform: translateX(4px);
+}
+
+/* ── Large desktop ≥1440px ── */
+@media (min-width: 1440px) {
+  .pv-section.pv-promise {
+    padding: 96px 60px;
+  }
+  .pv-promise__inner {
+    max-width: 1400px;
+    gap: 64px;
+  }
+  .pv-promise__heading      { font-size: 46px; }
+  .pv-promise__subtext      { font-size: 19px; }
+  .pv-promise__stat-value   { font-size: 42px; }
+  .pv-promise__stat-label   { font-size: 15px; }
+  .pv-promise__card-img     { height: 280px; }
+}
+
+/* ── Tablet 750–989px ── */
+@media (max-width: 989px) {
+  .pv-section.pv-promise     { padding: 56px 28px; }
+  .pv-promise__inner         { gap: 40px; }
+  .pv-promise__heading       { font-size: 30px; }
+  .pv-promise__subtext       { font-size: 17px; }
+
+  /* Stats: 2×2 */
+  .pv-promise__stats         { grid-template-columns: repeat(2, 1fr); }
+  .pv-promise__stat:nth-child(2) { border-right: none; }
+  .pv-promise__stat:nth-child(1),
+  .pv-promise__stat:nth-child(2) { border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .pv-promise__stat-value    { font-size: 30px; }
+
+  /* Cards: 2 cols */
+  .pv-promise__cards         { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Mobile ≤749px ── */
+@media (max-width: 749px) {
+  .pv-section.pv-promise     { padding: 48px 16px; }
+  .pv-promise__inner         { gap: 32px; }
+  .pv-promise__heading       { font-size: 26px; }
+  .pv-promise__subtext       { font-size: 16px; }
+
+  /* Stats: 1 col */
+  .pv-promise__stats         { grid-template-columns: 1fr 1fr; border-radius: 16px; }
+  .pv-promise__stat          { padding: 24px 16px; }
+  .pv-promise__stat:nth-child(2) { border-right: none; }
+  .pv-promise__stat:nth-child(1),
+  .pv-promise__stat:nth-child(2) { border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .pv-promise__stat:nth-child(3) { border-right: 1px solid rgba(255,255,255,0.1); }
+  .pv-promise__stat-value    { font-size: 26px; }
+
+  /* Cards: stacked */
+  .pv-promise__cards         { grid-template-columns: 1fr; }
+  .pv-promise__card-img      { height: 220px; }
+  .pv-promise__card-title    { font-size: 18px; }
+  .pv-promise__card-text     { font-size: 14px; }
+
+  .pv-promise__cta           { width: 100%; justify-content: center; padding: 15px 24px; }
+}
+
+/* ── Small phones ≤380px ── */
+@media (max-width: 380px) {
+  .pv-section.pv-promise     { padding: 40px 12px; }
+  .pv-promise__heading       { font-size: 22px; }
+  .pv-promise__stats         { grid-template-columns: 1fr; }
+  .pv-promise__stat:nth-child(3) { border-right: none; }
+  .pv-promise__stat          { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.1) !important; }
+  .pv-promise__stat:last-child { border-bottom: none !important; }
+}
+</style>
+
+{% schema %}
+{
+  "name": "PV Quality Promise",
+  "tag": "section",
+  "class": "pv-section",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Our Promise to You"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading (H2)",
+      "default": "Quality You Can Feel. Trust You Can Rely On."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Every Paawvital product is built to a standard we would use on our own pets — thoughtful design, safe materials, and a commitment to long-term well-being."
+    },
+    {
+      "type": "header",
+      "content": "Stats Bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stats",
+      "label": "Show stats bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "stat_1_value",
+      "label": "Stat 1 — Value",
+      "default": "10,000+"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "Stat 1 — Label",
+      "default": "Happy Pet Owners"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_value",
+      "label": "Stat 2 — Value",
+      "default": "3"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "Stat 2 — Label",
+      "default": "Countries Served"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_value",
+      "label": "Stat 3 — Value",
+      "default": "30-Day"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "Stat 3 — Label",
+      "default": "Money-Back Guarantee"
+    },
+    {
+      "type": "text",
+      "id": "stat_4_value",
+      "label": "Stat 4 — Value",
+      "default": "4.8★"
+    },
+    {
+      "type": "text",
+      "id": "stat_4_label",
+      "label": "Stat 4 — Label",
+      "default": "Average Customer Rating"
+    },
+    {
+      "type": "header",
+      "content": "CTA Button"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Shop All Pet Products"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button URL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promise_card",
+      "name": "Promise Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card image"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image alt text",
+          "default": "Paawvital product quality commitment"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge label (optional)",
+          "info": "Short label overlaid on the image, e.g. 'BPA Free'"
+        },
+        {
+          "type": "text",
+          "id": "card_title",
+          "label": "Card title (H3)",
+          "default": "Rigorously Tested Materials"
+        },
+        {
+          "type": "textarea",
+          "id": "card_body",
+          "label": "Card description",
+          "default": "Before any product reaches your pet, we put it through strict material and safety testing — so you never have to worry."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PV Quality Promise",
+      "blocks": [
+        {
+          "type": "promise_card",
+          "settings": {
+            "badge": "BPA Free",
+            "card_title": "Safe, Non-Toxic Materials",
+            "card_body": "All our products use pet-safe, BPA-free materials that are gentle for daily contact with your dog or cat."
+          }
+        },
+        {
+          "type": "promise_card",
+          "settings": {
+            "badge": "Satisfaction Guaranteed",
+            "card_title": "30-Day Worry-Free Returns",
+            "card_body": "Your satisfaction is guaranteed. If any product doesn't work for your pet, return it within 30 days — no hassle."
+          }
+        },
+        {
+          "type": "promise_card",
+          "settings": {
+            "badge": "Smart Design",
+            "card_title": "Thoughtfully Engineered",
+            "card_body": "Each product solves a real pet-owner problem — designed to be intuitive, durable, and practical for everyday use."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

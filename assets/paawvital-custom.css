@@ -1,0 +1,201 @@
+/* ============================================================
+   PAAWVITAL CUSTOM CSS
+   Load order: after base.css
+   ============================================================ */
+
+/* Section multicolumn */
+.section-multicolumn {
+  row-gap: var(--gap);
+}
+
+/* Star rating */
+.custom-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.custom-rating .rating-count.caption {
+  font-size: 13px;
+  opacity: 0.8;
+  font-weight: 400;
+  line-height: 1;
+}
+
+/* Price layout */
+.price-container {
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
+}
+.price-wrapper {
+  display: inline-flex;
+}
+.product-card__content .price {
+  color: #3ab546;
+  font-weight: 400;
+  font-size: 16px;
+}
+.product-card__content .compare-at-price {
+  color: #878787;
+  opacity: 1;
+  font-weight: 400;
+  font-size: 16px;
+}
+.product-card__content .price-badge,
+.sticky-add-to-cart__price .price-badge {
+  display: none;
+}
+.product-details product-price .price,
+.product-details product-price .compare-at-price {
+  color: #000;
+  font-size: 18px;
+  font-weight: 500;
+}
+.product-details product-price .compare-at-price {
+  opacity: 1;
+  color: #878787;
+}
+.price-badge {
+  font-weight: 600;
+  font-size: 13px;
+  color: #fff;
+  background: #3ab546;
+  margin: 0;
+  padding: 2px 10px;
+  line-height: 1.6;
+  border-radius: 25px;
+}
+.product-badges__badge {
+  color: #ffffff !important;
+  background-color: #3ab546 !important;
+}
+.cart__items-price .price-badge {
+  font-size: 13px !important;
+  font-weight: 400;
+}
+
+/* ── Product page media ── */
+.product-information__media slideshow-component {
+  row-gap: 24px;
+}
+.product-information__media slideshow-component .slideshow-controls__thumbnails {
+  padding: 0px;
+}
+.product-information__media slideshow-component .slideshow-controls__thumbnails .slideshow-control {
+  overflow: unset;
+}
+.product-information__media slideshow-component .slideshow-controls__thumbnails .slideshow-control:is([aria-selected=true]) {
+  outline: 0;
+  border: none;
+}
+.product-information__media slideshow-component .slideshow-controls__thumbnails .slideshow-control::after {
+  content: "";
+  opacity: 0;
+  background: currentColor;
+  width: 100%;
+  height: 2px;
+  margin-block-start: 4px;
+  transition: opacity .15s;
+  display: block;
+}
+.product-information__media slideshow-component .slideshow-controls__thumbnails .slideshow-control:is([aria-selected=true])::after {
+  opacity: 1;
+}
+
+/* Kaching bundles spacing */
+.product-details .kaching-bundles .kaching-bundles__block.kaching-bundles__block--loaded {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+.kaching-bundles .kaching-bundles__bar:last-child {
+  margin-bottom: 0px;
+}
+
+/* ── VARIANT PICKER ──
+   FIXED: Removed flex:unset + min-width:150px + max-width:50%
+   Those values broke the live theme's flex: 0 0 3.25em layout system.
+   If you need full-width stacked buttons, use the column layout below instead.
+*/
+.variant-picker__form .variant-option__button-label {
+  /* No overrides here — live base.css handles sizing correctly */
+}
+
+/* Accordion summary padding */
+.accordion summary.details__header {
+  padding-block: var(--padding-xl);
+}
+.product-details .accordion--dividers .details-content {
+  padding-block-end: var(--padding-xl);
+}
+
+/* Payment icons */
+.payment-icons__item svg {
+  height: 22px;
+  width: auto;
+}
+
+/* Sticky ATC button color */
+.sticky-add-to-cart__button {
+  background-color: rgb(253, 164, 30);
+}
+.sticky-add-to-cart__button:hover {
+  background-color: rgba(253, 164, 30, 0.85);
+}
+
+/* ── Cart Drawer ── */
+.cart-drawer__summary,
+.cart-drawer__items {
+  mask-image: unset !important;
+}
+.cart-drawer__summary {
+  box-shadow: 0 -6px 3px #00000003, 0 -5px 3px #00000008,
+              0 -2px 2px #0000000a, 0 -1px 1px #0000000d;
+}
+.cart-drawer__summary > .cart__summary-totals {
+  margin-block-start: 0 !important;
+  padding-block-start: 0px !important;
+  border-block-start: none !important;
+}
+.cart-drawer__summary .cart__total-value {
+  font-size: 16px;
+}
+.cart__discount-total .cart__total-value {
+  color: #3ab546;
+}
+.cart__items-price {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 5px 10px;
+  align-items: center;
+}
+.cart__ctas-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 9px;
+  margin-block-start: 6px;
+}
+.cart__payment-icons ul {
+  gap: 10px;
+}
+.payment-icons__item[data-payment-type="unionpay"],
+.payment-icons__item[data-payment-type="maestro"] {
+  display: none;
+}
+
+/* ── Mobile overrides ── */
+@media screen and (max-width: 749px) {
+  .product-information__media slideshow-component {
+    row-gap: 20px;
+  }
+  .product-information__media slideshow-component .slideshow-controls__thumbnails {
+    column-gap: 8px;
+    padding-inline: 20px;
+  }
+  .product-information__media slideshow-component .slideshow-controls__thumbnails .slideshow-control {
+    width: 56px;
+  }
+  .text-block.h2 > * {
+    font-size: 32px;
+  }
+}

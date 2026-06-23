@@ -1,0 +1,236 @@
+{%- liquid
+  assign layout = section.settings.layout
+  assign eyebrow = section.settings.eyebrow
+  assign title   = section.settings.title
+  assign body    = section.settings.body
+  assign img     = section.settings.image
+  assign f1 = section.settings.feature_1
+  assign f2 = section.settings.feature_2
+  assign f3 = section.settings.feature_3
+  assign f4 = section.settings.feature_4
+-%}
+
+<div class="pv-section">
+  <div class="pv-iwt {% if layout == 'image_right' %}pv-iwt--reverse{% endif %}">
+    <div class="pv-iwt__image">
+      {%- if img != blank -%}
+        <img
+          src="{{ img | image_url: width: 900 }}"
+          alt="{{ img.alt | escape }}"
+          width="900" height="675"
+          loading="lazy"
+        >
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'pv-placeholder-svg' }}
+      {%- endif -%}
+    </div>
+
+    <div class="pv-iwt__text">
+      {%- if eyebrow != blank -%}<p class="pv-iwt__eyebrow">{{ eyebrow }}</p>{%- endif -%}
+      {%- if title != blank -%}<h2 class="pv-iwt__title">{{ title }}</h2>{%- endif -%}
+      {%- if body != blank -%}<p class="pv-iwt__body">{{ body }}</p>{%- endif -%}
+      {%- if f1 != blank or f2 != blank or f3 != blank or f4 != blank -%}
+        <ul class="pv-iwt__features">
+          {%- if f1 != blank -%}<li>{{ f1 }}</li>{%- endif -%}
+          {%- if f2 != blank -%}<li>{{ f2 }}</li>{%- endif -%}
+          {%- if f3 != blank -%}<li>{{ f3 }}</li>{%- endif -%}
+          {%- if f4 != blank -%}<li>{{ f4 }}</li>{%- endif -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+<style>
+  /* ── Section wrapper ── */
+  .pv-section:has(.pv-iwt) {
+    padding: 80px 40px;
+    font-family: Inter, sans-serif;
+    background: #ffffff;
+  }
+
+  /* ── Two-column layout ── */
+  .pv-iwt {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    max-width: 1250px;
+    margin: 0 auto;
+  }
+
+  /* ── Reverse layout ── */
+  .pv-iwt--reverse {
+    grid-template-columns: 1fr 1.1fr;
+  }
+  .pv-iwt--reverse .pv-iwt__image { order: 2; }
+  .pv-iwt--reverse .pv-iwt__text  { order: 1; }
+
+  /* ── Image ── */
+  .pv-iwt__image {
+    border-radius: 16px;
+    overflow: hidden;
+    max-height: 560px;
+  }
+
+  .pv-iwt__image img,
+  .pv-iwt__image .pv-placeholder-svg {
+    width: 100%;
+    height: auto;
+    max-height: 560px;
+    display: block;
+    object-fit: contain;
+    border-radius: 16px;
+  }
+
+  /* ── Text side ── */
+  .pv-iwt__text {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    justify-content: center;
+  }
+
+  /* ── Eyebrow ── */
+  .pv-iwt__eyebrow {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #00cea7;
+    margin: 0;
+  }
+
+  /* ── Heading ── */
+  .pv-iwt__title {
+    font-family: Inter, sans-serif;
+    font-weight: 700;
+    font-size: 42px;
+    color: #000000;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  /* ── Body ── */
+  .pv-iwt__body {
+    font-size: 19px;
+    font-weight: 400;
+    color: #000000cf;
+    margin: 0;
+    line-height: 1.75;
+  }
+
+  /* ── Feature list ── */
+  .pv-iwt__features {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .pv-iwt__features li {
+    font-size: 17px;
+    font-weight: 500;
+    color: #000000cf;
+    padding-left: 28px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .pv-iwt__features li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #00cea7;
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  /* ── Large desktop / 24" monitors (≥1600px) ── */
+  @media (min-width: 1600px) {
+    .pv-section:has(.pv-iwt) {
+      padding: 96px 60px;
+    }
+
+    .pv-iwt {
+      max-width: 1400px;
+      gap: 80px;
+    }
+
+    .pv-iwt__image,
+    .pv-iwt__image img {
+      max-height: 620px;
+    }
+
+    .pv-iwt__title { font-size: 48px; }
+    .pv-iwt__body  { font-size: 20px; }
+    .pv-iwt__features li { font-size: 18px; }
+  }
+
+  /* ── Tablet (≤989px) ── */
+  @media (max-width: 989px) {
+    .pv-section:has(.pv-iwt) {
+      padding: 56px 28px;
+    }
+
+    .pv-iwt {
+      gap: 40px;
+      grid-template-columns: 1fr 1fr;
+      max-width: 100%;
+    }
+
+    .pv-iwt--reverse {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .pv-iwt__title { font-size: 32px; }
+    .pv-iwt__body  { font-size: 17px; }
+    .pv-iwt__features li { font-size: 16px; }
+
+    .pv-iwt__image,
+    .pv-iwt__image img { max-height: 460px; }
+  }
+
+  /* ── Mobile (≤749px) ── */
+  @media (max-width: 749px) {
+    .pv-section:has(.pv-iwt) {
+      padding: 40px 16px;
+    }
+
+    .pv-iwt,
+    .pv-iwt--reverse {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .pv-iwt__image { order: 1 !important; max-height: 380px; }
+    .pv-iwt__image img { max-height: 380px; }
+    .pv-iwt__text  { order: 2 !important; }
+
+    .pv-iwt__title { font-size: 28px; }
+    .pv-iwt__body  { font-size: 17px; }
+    .pv-iwt__features li { font-size: 16px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "PV Image with Text",
+  "tag": "div",
+  "class": "pv-section",
+  "settings": [
+    {"type": "select", "id": "layout", "label": "Layout", "default": "image_left",
+     "options": [{"value":"image_left","label":"Image Left"},{"value":"image_right","label":"Image Right"}]},
+    {"type": "image_picker", "id": "image", "label": "Image"},
+    {"type": "text",     "id": "eyebrow",   "label": "Eyebrow",     "default": "Why It Works"},
+    {"type": "text",     "id": "title",     "label": "Heading",     "default": "Designed for your pet's comfort"},
+    {"type": "textarea","id": "body",      "label": "Body text",   "default": "Every detail has been crafted with your pet's wellbeing in mind."},
+    {"type": "text",     "id": "feature_1", "label": "Feature 1",   "default": "Gentle steam for sensitive skin"},
+    {"type": "text",     "id": "feature_2", "label": "Feature 2",   "default": "Removes 99% of loose hair"},
+    {"type": "text",     "id": "feature_3", "label": "Feature 3",   "default": "Whisper-quiet motor"},
+    {"type": "text",     "id": "feature_4", "label": "Feature 4",   "default": "USB rechargeable — no batteries needed"}
+  ],
+  "presets": [{"name": "PV Image with Text"}]
+}
+{% endschema %}

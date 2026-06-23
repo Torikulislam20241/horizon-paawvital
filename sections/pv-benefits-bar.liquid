@@ -1,0 +1,243 @@
+<section class="pv-section pv-benefits">
+  <div class="pv-benefits__inner">
+    {%- for i in (1..4) -%}
+      {%- liquid
+        assign icon_key = 'icon_' | append: i
+        assign title_key = 'title_' | append: i
+        assign text_key  = 'text_'  | append: i
+        assign icon  = section.settings[icon_key]
+        assign title = section.settings[title_key]
+        assign text  = section.settings[text_key]
+      -%}
+      {%- if title != blank -%}
+        <div class="pv-benefits__item">
+          <div class="pv-benefits__icon">
+            {%- case icon -%}
+              {%- when 'truck' -%}
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              {%- when 'shield' -%}
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              {%- when 'refresh' -%}
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+              {%- when 'star' -%}
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              {%- when 'heart' -%}
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              {%- else -%}
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            {%- endcase -%}
+          </div>
+          <div>
+            <p class="pv-benefits__title">{{ title }}</p>
+            {%- if text != blank -%}<p class="pv-benefits__text">{{ text }}</p>{%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+  <style>
+  /* ── Benefits Bar ── */
+  .pv-section.pv-benefits {
+    background-color: #1e5c3a;   /* screenshot এর dark green */
+    width: 100%;
+  }
+
+  .pv-benefits__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: Inter, sans-serif;
+  }
+
+  .pv-benefits__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #ffffff;
+    flex: 1 1 180px;
+    min-width: 160px;
+  }
+
+  .pv-benefits__icon {
+    flex-shrink: 0;
+    opacity: 0.9;
+    color: #ffffff;
+  }
+
+  .pv-benefits__icon svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+  }
+
+  .pv-benefits__title {
+    font-family: Inter, sans-serif;
+    font-weight: 700;       /* theme heading weight */
+    font-size: 14px;
+    margin: 0 0 2px;
+    color: #ffffff;
+    line-height: 1.3;
+  }
+
+  .pv-benefits__text {
+    font-family: Inter, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
+  }
+
+  /* ── Large desktop / 24" monitors (≥1600px) ──
+     Matches the 1400px container + slightly larger type used across the
+     other PV sections on this page. ── */
+  @media (min-width: 1600px) {
+    .pv-benefits__inner {
+      max-width: 1400px;
+      padding: 24px 60px;
+      gap: 24px;
+    }
+
+    .pv-benefits__icon svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .pv-benefits__title {
+      font-size: 15px;
+    }
+
+    .pv-benefits__text {
+      font-size: 13px;
+    }
+  }
+
+  /* ── Small desktop / laptops (990px–1279px) ── */
+  @media (min-width: 990px) and (max-width: 1279px) {
+    .pv-benefits__inner {
+      padding: 20px 28px;
+      gap: 14px;
+    }
+
+    .pv-benefits__item {
+      flex: 1 1 160px;
+      min-width: 140px;
+    }
+  }
+
+  /* ── Tablet ── */
+  @media (max-width: 989px) {
+    .pv-benefits__inner {
+      padding: 20px 24px;
+      gap: 12px;
+    }
+
+    .pv-benefits__item {
+      flex: 1 1 140px;
+    }
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 749px) {
+    .pv-benefits__inner {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px 16px;
+      gap: 16px;
+    }
+
+    .pv-benefits__item {
+      flex: unset;
+      width: 100%;
+    }
+  }
+
+  /* ── Small phones (≤380px, e.g. iPhone SE) ── */
+  @media (max-width: 380px) {
+    .pv-benefits__inner {
+      padding: 16px 12px;
+      gap: 12px;
+    }
+
+    .pv-benefits__item {
+      gap: 10px;
+    }
+
+    .pv-benefits__icon svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .pv-benefits__title {
+      font-size: 13px;
+    }
+
+    .pv-benefits__text {
+      font-size: 11px;
+    }
+  }
+
+  /* ── Short / landscape phones ──
+     Stacking all 4 items in a single column (mobile default) takes too
+     much vertical space when the viewport is short. Switch to a 2x2
+     grid so the bar stays compact. ── */
+  @media (max-width: 900px) and (max-height: 480px) and (orientation: landscape) {
+    .pv-benefits__inner {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      align-items: center;
+      padding: 14px 20px;
+      gap: 10px 16px;
+    }
+
+    .pv-benefits__item {
+      width: 100%;
+      flex: unset;
+      min-width: 0;
+    }
+
+    .pv-benefits__icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .pv-benefits__title {
+      font-size: 12px;
+    }
+
+    .pv-benefits__text {
+      font-size: 10px;
+    }
+  }
+</style>
+
+
+</section>
+
+{% schema %}
+{
+  "name": "PV Benefits Bar",
+  "tag": "div",
+  "class": "pv-section",
+  "settings": [
+    {"type": "select", "id": "icon_1", "label": "Icon 1", "default": "truck", "options": [{"value":"truck","label":"Truck"},{"value":"shield","label":"Shield"},{"value":"refresh","label":"Refresh"},{"value":"star","label":"Star"},{"value":"heart","label":"Heart"}]},
+    {"type": "text",   "id": "title_1", "label": "Title 1", "default": "Free Shipping"},
+    {"type": "text",   "id": "text_1",  "label": "Text 1",  "default": "On orders over $50"},
+    {"type": "select", "id": "icon_2", "label": "Icon 2", "default": "shield", "options": [{"value":"truck","label":"Truck"},{"value":"shield","label":"Shield"},{"value":"refresh","label":"Refresh"},{"value":"star","label":"Star"},{"value":"heart","label":"Heart"}]},
+    {"type": "text",   "id": "title_2", "label": "Title 2", "default": "Vet Approved"},
+    {"type": "text",   "id": "text_2",  "label": "Text 2",  "default": "Safe for all breeds"},
+    {"type": "select", "id": "icon_3", "label": "Icon 3", "default": "refresh", "options": [{"value":"truck","label":"Truck"},{"value":"shield","label":"Shield"},{"value":"refresh","label":"Refresh"},{"value":"star","label":"Star"},{"value":"heart","label":"Heart"}]},
+    {"type": "text",   "id": "title_3", "label": "Title 3", "default": "30-Day Returns"},
+    {"type": "text",   "id": "text_3",  "label": "Text 3",  "default": "Hassle-free guarantee"},
+    {"type": "select", "id": "icon_4", "label": "Icon 4", "default": "star", "options": [{"value":"truck","label":"Truck"},{"value":"shield","label":"Shield"},{"value":"refresh","label":"Refresh"},{"value":"star","label":"Star"},{"value":"heart","label":"Heart"}]},
+    {"type": "text",   "id": "title_4", "label": "Title 4", "default": "5-Star Rated"},
+    {"type": "text",   "id": "text_4",  "label": "Text 4",  "default": "Loved by 10,000+ pets"}
+  ],
+  "presets": [{"name": "PV Benefits Bar"}]
+}
+{% endschema %}

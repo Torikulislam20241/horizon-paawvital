@@ -1,0 +1,729 @@
+{%- liquid
+  assign section_width = section.settings.section_width
+  assign section_bg    = section.settings.background_color
+  assign heading_color = section.settings.heading_color
+  assign title_color   = section.settings.title_color
+  assign desc_color    = section.settings.description_color
+  assign pt            = section.settings.padding_top
+  assign pb            = section.settings.padding_bottom
+  assign pt_m          = section.settings.padding_top_mobile
+  assign pb_m          = section.settings.padding_bottom_mobile
+  assign card_bg       = section.settings.card_background
+  assign card_radius   = section.settings.card_border_radius
+  assign card_border   = section.settings.card_border_color
+  assign icon_sz       = section.settings.icon_size
+  assign icon_sz_m     = section.settings.icon_size_mobile
+-%}
+
+<style>
+  /* ── Section wrapper ──
+     Removed the old display:flex + min-height(vh) rules. Those forced the
+     section to a fixed viewport-relative height and then vertically centered
+     the heading+grid inside it, which is what produced the large empty band
+     above/below the cards and made this section feel disconnected from the
+     sections above it. Height now comes naturally from padding + content. */
+  #pv-adv-{{ section.id }} {
+    background-color: {{ section_bg }};
+    padding-top: {{ pt }}px;
+    padding-bottom: {{ pb }}px;
+  }
+
+  #pv-adv-{{ section.id }} .pv-adv__inner {
+    width: 100%;
+    margin-inline: auto;
+    box-sizing: border-box;
+
+    /* Width Logic */
+    {% if section_width == 'page' %}
+      max-width: var(--page-width, 1250px);
+      padding-inline: var(--page-margin, 24px);
+    {% elsif section_width == 'full' %}
+      max-width: 100%;
+      padding-inline: 0;
+    {% endif %}
+  }
+
+  #pv-adv-{{ section.id }} .pv-adv__heading {
+    color: {{ heading_color }};
+    font-family: var(--font-heading--family, var(--font-body--family, inherit));
+    font-weight: 700;
+    font-size: clamp(1.5rem, 3vw, {{ section.settings.heading_size }}px);
+    line-height: 1.2;
+    margin: 0 0 {{ section.settings.heading_margin_bottom }}px;
+    letter-spacing: -0.01em;
+  }
+
+  #pv-adv-{{ section.id }} .pv-adv__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: {{ section.settings.card_gap }}px;
+  }
+
+  #pv-adv-{{ section.id }} .pv-adv__card {
+    background-color: {{ card_bg }};
+    border: 1px solid {{ card_border }};
+    border-radius: {{ card_radius }}px;
+    padding: {{ section.settings.card_padding }}px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  #pv-adv-{{ section.id }} .pv-adv__card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+    transform: translateY(-2px);
+  }
+
+  #pv-adv-{{ section.id }} .pv-adv__icon-wrap {
+    width: {{ icon_sz }}px;
+    height: {{ icon_sz }}px;
+    margin-bottom: {{ section.settings.icon_margin_bottom }}px;
+    flex-shrink: 0;
+  }
+
+  #pv-adv-{{ section.id }} .pv-adv__icon-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  #pv-adv-{{ section.id }} .pv-adv__card-title {
+    color: {{ title_color }};
+    font-family: var(--font-heading--family, var(--font-body--family, inherit));
+    font-weight: 700;
+    font-size: {{ section.settings.title_size }}px;
+    line-height: 1.3;
+    margin: 0 0 {{ section.settings.title_margin_bottom }}px;
+  }
+
+  #pv-adv-{{ section.id }} .pv-adv__card-desc {
+    color: {{ desc_color }};
+    font-family: var(--font-body--family, inherit);
+    font-size: {{ section.settings.description_size }}px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ── Desktop (≥990px): 4-across grid ──
+     4 cards in a single row reads as a premium, full-width band that
+     matches the wider grids used in the sections above. ── */
+  @media screen and (min-width: 990px) {
+    #pv-adv-{{ section.id }} .pv-adv__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* ── Large desktop / 24" monitors (≥1600px) ── */
+  @media screen and (min-width: 1600px) {
+    #pv-adv-{{ section.id }} .pv-adv__inner {
+      max-width: 1400px;
+    }
+
+    #pv-adv-{{ section.id }} .pv-adv__heading {
+      font-size: calc({{ section.settings.heading_size }}px + 8px);
+    }
+
+    #pv-adv-{{ section.id }} .pv-adv__card-title {
+      font-size: calc({{ section.settings.title_size }}px + 2px);
+    }
+
+    #pv-adv-{{ section.id }} .pv-adv__card-desc {
+      font-size: calc({{ section.settings.description_size }}px + 1px);
+    }
+  }
+
+  /* ── Tablet (750px–989px): 2 columns ── */
+  @media screen and (max-width: 989px) and (min-width: 750px) {
+    #pv-adv-{{ section.id }} .pv-adv__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* ── Mobile ── */
+  @media screen and (max-width: 749px) {
+    #pv-adv-{{ section.id }} {
+      padding-top: {{ pt_m }}px;
+      padding-bottom: {{ pb_m }}px;
+    }
+
+    #pv-adv-{{ section.id }} .pv-adv__inner {
+      {% if section_width == 'page' %}
+        padding-inline: var(--page-margin, 16px);
+      {% endif %}
+    }
+
+    #pv-adv-{{ section.id }} .pv-adv__heading {
+      font-size: {{ section.settings.heading_size_mobile }}px;
+      margin-bottom: {{ section.settings.heading_margin_bottom_mobile }}px;
+    }
+
+    #pv-adv-{{ section.id }} .pv-adv__grid {
+      grid-template-columns: 1fr;
+      gap: {{ section.settings.card_gap_mobile }}px;
+    }
+
+    #pv-adv-{{ section.id }} .pv-adv__card {
+      padding: {{ section.settings.card_padding_mobile }}px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #pv-adv-{{ section.id }} .pv-adv__icon-wrap {
+      width: {{ icon_sz_m }}px;
+      height: {{ icon_sz_m }}px;
+      margin-bottom: {{ section.settings.icon_margin_bottom_mobile }}px;
+    }
+
+    #pv-adv-{{ section.id }} .pv-adv__card-title {
+      font-size: {{ section.settings.title_size_mobile }}px;
+      margin-bottom: {{ section.settings.title_margin_bottom_mobile }}px;
+    }
+
+    #pv-adv-{{ section.id }} .pv-adv__card-desc {
+      font-size: {{ section.settings.description_size_mobile }}px;
+    }
+  }
+</style>
+
+<section
+  id="pv-adv-{{ section.id }}"
+  class="pv-advantages-grid"
+  aria-label="{{ section.settings.heading | escape }}"
+>
+  <div class="pv-adv__inner">
+
+    {%- if section.settings.heading != blank -%}
+      <h2 class="pv-adv__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    <div class="pv-adv__grid">
+      {%- for i in (1..4) -%}
+        {%- liquid
+          assign key_enabled = 'card_' | append: i | append: '_enabled'
+          assign key_icon    = 'card_' | append: i | append: '_icon'
+          assign key_title   = 'card_' | append: i | append: '_title'
+          assign key_desc    = 'card_' | append: i | append: '_description'
+        -%}
+
+        {%- if section.settings[key_enabled] -%}
+          <article class="pv-adv__card">
+
+            {%- if section.settings[key_icon] != blank -%}
+              <div class="pv-adv__icon-wrap">
+                {{-
+                  section.settings[key_icon]
+                  | image_url: width: 128
+                  | image_tag:
+                    loading: 'lazy',
+                    width: section.settings.icon_size,
+                    height: section.settings.icon_size,
+                    alt: section.settings[key_title] | escape
+                -}}
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings[key_title] != blank -%}
+              <h3 class="pv-adv__card-title">{{ section.settings[key_title] | escape }}</h3>
+            {%- endif -%}
+
+            {%- if section.settings[key_desc] != blank -%}
+              <p class="pv-adv__card-desc">{{ section.settings[key_desc] }}</p>
+            {%- endif -%}
+
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Advantages Grid",
+  "tag": "section",
+  "class": "pv-advantages-grid-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Size"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page", "label": "Page" },
+        { "value": "full", "label": "Full" }
+      ],
+      "default": "page"
+    },
+    {
+      "type": "select",
+      "id": "section_height",
+      "label": "Height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small",
+      "info": "Height is now driven by padding and content. This setting is kept for backwards compatibility and no longer changes layout."
+    },
+    {
+      "type": "header",
+      "content": "Section Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Advantages of Paawvital"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size (desktop)",
+      "min": 20,
+      "max": 56,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "label": "Heading size (mobile)",
+      "min": 18,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "label": "Heading bottom spacing (desktop)",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom_mobile",
+      "label": "Heading bottom spacing (mobile)",
+      "min": 12,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Layout & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top (desktop)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom (desktop)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Card gap (desktop)",
+      "min": 8,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "card_gap_mobile",
+      "label": "Card gap (mobile)",
+      "min": 8,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Card Style"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_border_color",
+      "label": "Card border color",
+      "default": "#e6e6e6"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Card padding (desktop)",
+      "min": 12,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "card_padding_mobile",
+      "label": "Card padding (mobile)",
+      "min": 12,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Icon"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size (desktop)",
+      "min": 32,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "icon_size_mobile",
+      "label": "Icon size (mobile)",
+      "min": 24,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "icon_margin_bottom",
+      "label": "Icon bottom spacing (desktop)",
+      "min": 8,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "icon_margin_bottom_mobile",
+      "label": "Icon bottom spacing (mobile)",
+      "min": 4,
+      "max": 28,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Card title color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Card title size (desktop)",
+      "min": 14,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "label": "Card title size (mobile)",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom",
+      "label": "Title bottom spacing (desktop)",
+      "min": 4,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "title_margin_bottom_mobile",
+      "label": "Title bottom spacing (mobile)",
+      "min": 4,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#555555"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Description size (desktop)",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "description_size_mobile",
+      "label": "Description size (mobile)",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "header",
+      "content": "Card 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_1_enabled",
+      "label": "Enable card 1",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_1_icon",
+      "label": "Card 1 icon"
+    },
+    {
+      "type": "text",
+      "id": "card_1_title",
+      "label": "Card 1 title",
+      "default": "Removes 99% of impurities"
+    },
+    {
+      "type": "textarea",
+      "id": "card_1_description",
+      "label": "Card 1 description",
+      "default": "The 5-layer carbon filter removes magnesium, calcium, hair, dirt, and other impurities from your dog's water."
+    },
+    {
+      "type": "header",
+      "content": "Card 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_2_enabled",
+      "label": "Enable card 2",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_2_icon",
+      "label": "Card 2 icon"
+    },
+    {
+      "type": "text",
+      "id": "card_2_title",
+      "label": "Card 2 title",
+      "default": "30-day guarantee"
+    },
+    {
+      "type": "textarea",
+      "id": "card_2_description",
+      "label": "Card 2 description",
+      "default": "Whether in 30 minutes or after 30 days – if you are not satisfied as a customer, you will receive your money back, no questions asked."
+    },
+    {
+      "type": "header",
+      "content": "Card 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_3_enabled",
+      "label": "Enable card 3",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_3_icon",
+      "label": "Card 3 icon"
+    },
+    {
+      "type": "text",
+      "id": "card_3_title",
+      "label": "Card 3 title",
+      "default": "Veterinarian tested & recommended"
+    },
+    {
+      "type": "textarea",
+      "id": "card_3_description",
+      "label": "Card 3 description",
+      "default": "Our products have been tested, approved, and recommended by veterinarians."
+    },
+    {
+      "type": "header",
+      "content": "Card 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_4_enabled",
+      "label": "Enable card 4",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "card_4_icon",
+      "label": "Card 4 icon"
+    },
+    {
+      "type": "text",
+      "id": "card_4_title",
+      "label": "Card 4 title",
+      "default": "100% dog-safe materials"
+    },
+    {
+      "type": "textarea",
+      "id": "card_4_description",
+      "label": "Card 4 description",
+      "default": "All our products are food-safe and comply with FDA regulations."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Advantages Grid",
+      "settings": {
+        "section_width": "page",
+        "section_height": "small",
+        "heading": "Advantages of Paawvital",
+        "heading_color": "#000000",
+        "heading_size": 36,
+        "heading_size_mobile": 26,
+        "heading_margin_bottom": 40,
+        "heading_margin_bottom_mobile": 24,
+        "background_color": "#f5f5f5",
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "padding_top_mobile": 40,
+        "padding_bottom_mobile": 40,
+        "card_gap": 24,
+        "card_gap_mobile": 16,
+        "card_background": "#ffffff",
+        "card_border_color": "#e6e6e6",
+        "card_border_radius": 12,
+        "card_padding": 28,
+        "card_padding_mobile": 20,
+        "icon_size": 64,
+        "icon_size_mobile": 48,
+        "icon_margin_bottom": 20,
+        "icon_margin_bottom_mobile": 16,
+        "title_color": "#000000",
+        "title_size": 20,
+        "title_size_mobile": 17,
+        "title_margin_bottom": 12,
+        "title_margin_bottom_mobile": 8,
+        "description_color": "#555555",
+        "description_size": 15,
+        "description_size_mobile": 14,
+        "card_1_enabled": true,
+        "card_1_title": "Removes 99% of impurities",
+        "card_1_description": "The 5-layer carbon filter removes magnesium, calcium, hair, dirt, and other impurities from your dog's water.",
+        "card_2_enabled": true,
+        "card_2_title": "30-day guarantee",
+        "card_2_description": "Whether in 30 minutes or after 30 days – if you are not satisfied as a customer, you will receive your money back, no questions asked.",
+        "card_3_enabled": true,
+        "card_3_title": "Veterinarian tested & recommended",
+        "card_3_description": "Our products have been tested, approved, and recommended by veterinarians.",
+        "card_4_enabled": true,
+        "card_4_title": "100% dog-safe materials",
+        "card_4_description": "All our products are food-safe and comply with FDA regulations."
+      }
+    }
+  ]
+}
+{% endschema %}

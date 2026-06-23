@@ -1,0 +1,492 @@
+{% doc %}
+  @prompt
+    I want 3 faq question, which are responsive and related to all products , Look at the FAQ; there is a block like Facebook comments. I will analyze it in my store and make it the layout size, spacing, and responsive for all devices., You haven't even made a Facebook comment.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-fb-comments-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .ai-fb-comments-container-{{ ai_gen_id }} {
+    max-width: 100%;
+    margin: 0;
+    padding: 16px;
+    border: 1px solid {{ block.settings.border_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    background-color: {{ block.settings.container_background }};
+  }
+
+  .ai-fb-comments-header-{{ ai_gen_id }} {
+    font-size: {{ block.settings.header_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.header_color }};
+    margin: 0 0 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid {{ block.settings.divider_color }};
+  }
+
+  .ai-fb-comments-list-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ai-fb-comment-{{ ai_gen_id }} {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .ai-fb-comment-avatar-{{ ai_gen_id }} {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: {{ block.settings.avatar_background }};
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .ai-fb-comment-avatar-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-fb-comment-content-{{ ai_gen_id }} {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ai-fb-comment-bubble-{{ ai_gen_id }} {
+    background-color: {{ block.settings.bubble_background }};
+    border-radius: 18px;
+    padding: 8px 12px;
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .ai-fb-comment-author-{{ ai_gen_id }} {
+    font-size: {{ block.settings.author_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.author_color }};
+    margin: 0 0 2px;
+  }
+
+  .ai-fb-comment-text-{{ ai_gen_id }} {
+    font-size: {{ block.settings.text_size }}px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.4;
+    margin: 0;
+    word-wrap: break-word;
+  }
+
+  .ai-fb-comment-meta-{{ ai_gen_id }} {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 4px;
+    padding-left: 12px;
+  }
+
+  .ai-fb-comment-time-{{ ai_gen_id }} {
+    font-size: 12px;
+    color: {{ block.settings.meta_color }};
+  }
+
+  .ai-fb-comment-action-{{ ai_gen_id }} {
+    font-size: 12px;
+    font-weight: 600;
+    color: {{ block.settings.meta_color }};
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .ai-fb-comment-action-{{ ai_gen_id }}:hover {
+    text-decoration: underline;
+  }
+
+  .ai-fb-comment-separator-{{ ai_gen_id }} {
+    font-size: 12px;
+    color: {{ block.settings.meta_color }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-fb-comments-container-{{ ai_gen_id }} {
+      padding: 12px;
+      border-radius: {{ block.settings.border_radius | divided_by: 2 }}px;
+    }
+
+    .ai-fb-comments-header-{{ ai_gen_id }} {
+      font-size: {{ block.settings.header_size | times: 0.9 }}px;
+      margin-bottom: 12px;
+    }
+
+    .ai-fb-comment-{{ ai_gen_id }} {
+      gap: 10px;
+    }
+
+    .ai-fb-comment-avatar-{{ ai_gen_id }} {
+      width: 36px;
+      height: 36px;
+    }
+
+    .ai-fb-comment-author-{{ ai_gen_id }} {
+      font-size: {{ block.settings.author_size | times: 0.9 }}px;
+    }
+
+    .ai-fb-comment-text-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_size | times: 0.9 }}px;
+    }
+
+    .ai-fb-comment-meta-{{ ai_gen_id }} {
+      gap: 10px;
+      padding-left: 10px;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .ai-fb-comments-container-{{ ai_gen_id }} {
+      padding: 10px;
+    }
+
+    .ai-fb-comments-header-{{ ai_gen_id }} {
+      font-size: {{ block.settings.header_size | times: 0.85 }}px;
+    }
+
+    .ai-fb-comment-{{ ai_gen_id }} {
+      gap: 8px;
+    }
+
+    .ai-fb-comment-avatar-{{ ai_gen_id }} {
+      width: 32px;
+      height: 32px;
+    }
+
+    .ai-fb-comment-bubble-{{ ai_gen_id }} {
+      padding: 7px 10px;
+    }
+
+    .ai-fb-comment-author-{{ ai_gen_id }} {
+      font-size: {{ block.settings.author_size | times: 0.85 }}px;
+    }
+
+    .ai-fb-comment-text-{{ ai_gen_id }} {
+      font-size: {{ block.settings.text_size | times: 0.85 }}px;
+    }
+
+    .ai-fb-comment-meta-{{ ai_gen_id }} {
+      gap: 8px;
+      padding-left: 8px;
+    }
+  }
+{% endstyle %}
+
+<fb-comments-{{ ai_gen_id }} class="ai-fb-comments-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-fb-comments-container-{{ ai_gen_id }}">
+    {% if block.settings.header != blank %}
+      <div class="ai-fb-comments-header-{{ ai_gen_id }}">{{ block.settings.header }}</div>
+    {% endif %}
+
+    <div class="ai-fb-comments-list-{{ ai_gen_id }}">
+      {% for i in (1..3) %}
+        {% assign author_key = 'comment_' | append: i | append: '_author' %}
+        {% assign text_key = 'comment_' | append: i | append: '_text' %}
+        {% assign time_key = 'comment_' | append: i | append: '_time' %}
+        {% assign avatar_key = 'comment_' | append: i | append: '_avatar' %}
+        
+        {% assign author = block.settings[author_key] %}
+        {% assign text = block.settings[text_key] %}
+        {% assign time = block.settings[time_key] %}
+        {% assign avatar = block.settings[avatar_key] %}
+
+        {% if author != blank or text != blank %}
+          <div class="ai-fb-comment-{{ ai_gen_id }}">
+            <div class="ai-fb-comment-avatar-{{ ai_gen_id }}">
+              {% if avatar != blank %}
+                <img src="{{ avatar | image_url: width: 80 }}" alt="{{ author | escape }}" loading="lazy" width="80" height="80">
+              {% else %}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="{{ block.settings.avatar_icon_color }}">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+              {% endif %}
+            </div>
+            <div class="ai-fb-comment-content-{{ ai_gen_id }}">
+              <div class="ai-fb-comment-bubble-{{ ai_gen_id }}">
+                {% if author != blank %}
+                  <div class="ai-fb-comment-author-{{ ai_gen_id }}">{{ author }}</div>
+                {% endif %}
+                {% if text != blank %}
+                  <div class="ai-fb-comment-text-{{ ai_gen_id }}">{{ text }}</div>
+                {% endif %}
+              </div>
+              <div class="ai-fb-comment-meta-{{ ai_gen_id }}">
+                {% if time != blank %}
+                  <span class="ai-fb-comment-time-{{ ai_gen_id }}">{{ time }}</span>
+                  <span class="ai-fb-comment-separator-{{ ai_gen_id }}">·</span>
+                {% endif %}
+                <button class="ai-fb-comment-action-{{ ai_gen_id }}">Like</button>
+                <span class="ai-fb-comment-separator-{{ ai_gen_id }}">·</span>
+                <button class="ai-fb-comment-action-{{ ai_gen_id }}">Reply</button>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</fb-comments-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class FbComments{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.actions = this.querySelectorAll('.ai-fb-comment-action-{{ ai_gen_id }}');
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        this.actions.forEach((action) => {
+          action.addEventListener('click', (e) => {
+            e.preventDefault();
+          });
+        });
+      }
+    }
+
+    customElements.define('fb-comments-{{ ai_gen_id }}', FbComments{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Facebook comments",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "header",
+      "label": "Header text",
+      "default": "Comments"
+    },
+    {
+      "type": "range",
+      "id": "header_size",
+      "label": "Header size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 17
+    },
+    {
+      "type": "header",
+      "content": "Comment 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "comment_1_avatar",
+      "label": "Avatar"
+    },
+    {
+      "type": "text",
+      "id": "comment_1_author",
+      "label": "Author name",
+      "default": "Sarah Johnson"
+    },
+    {
+      "type": "textarea",
+      "id": "comment_1_text",
+      "label": "Comment text",
+      "default": "This product is amazing! Highly recommend it to anyone looking for quality."
+    },
+    {
+      "type": "text",
+      "id": "comment_1_time",
+      "label": "Time",
+      "default": "2h"
+    },
+    {
+      "type": "header",
+      "content": "Comment 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "comment_2_avatar",
+      "label": "Avatar"
+    },
+    {
+      "type": "text",
+      "id": "comment_2_author",
+      "label": "Author name",
+      "default": "Michael Chen"
+    },
+    {
+      "type": "textarea",
+      "id": "comment_2_text",
+      "label": "Comment text",
+      "default": "Great customer service and fast shipping. Very satisfied with my purchase!"
+    },
+    {
+      "type": "text",
+      "id": "comment_2_time",
+      "label": "Time",
+      "default": "5h"
+    },
+    {
+      "type": "header",
+      "content": "Comment 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "comment_3_avatar",
+      "label": "Avatar"
+    },
+    {
+      "type": "text",
+      "id": "comment_3_author",
+      "label": "Author name",
+      "default": "Emily Rodriguez"
+    },
+    {
+      "type": "textarea",
+      "id": "comment_3_text",
+      "label": "Comment text",
+      "default": "Exactly what I was looking for. The quality exceeded my expectations!"
+    },
+    {
+      "type": "text",
+      "id": "comment_3_time",
+      "label": "Time",
+      "default": "1d"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 16,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "container_background",
+      "label": "Container background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border",
+      "default": "#dddfe2"
+    },
+    {
+      "type": "color",
+      "id": "header_color",
+      "label": "Header",
+      "default": "#050505"
+    },
+    {
+      "type": "color",
+      "id": "bubble_background",
+      "label": "Comment bubble background",
+      "default": "#f0f2f5"
+    },
+    {
+      "type": "color",
+      "id": "author_color",
+      "label": "Author name",
+      "default": "#050505"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Comment text",
+      "default": "#050505"
+    },
+    {
+      "type": "color",
+      "id": "meta_color",
+      "label": "Meta text",
+      "default": "#65676b"
+    },
+    {
+      "type": "color",
+      "id": "avatar_background",
+      "label": "Avatar background",
+      "default": "#e4e6eb"
+    },
+    {
+      "type": "color",
+      "id": "avatar_icon_color",
+      "label": "Avatar icon",
+      "default": "#8a8d91"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider",
+      "default": "#e4e6eb"
+    },
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+    {
+      "type": "range",
+      "id": "author_size",
+      "label": "Author size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 13
+    },
+    {
+      "type": "range",
+      "id": "text_size",
+      "label": "Text size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    }
+  ],
+  "presets": [
+    {
+      "name": "Facebook comments"
+    }
+  ]
+}
+{% endschema %}
